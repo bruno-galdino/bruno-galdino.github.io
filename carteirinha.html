@@ -110,7 +110,7 @@
                 <h1>Foto para Crachá de Operadores</h1>
                 <h3>Escolha o arquivo com a base</h3>
                 <input type='file' name='base-op' id='base-op' @change="loadData">
-                <button click="window.print"></button>
+                <button click="print">Imprimir</button>
             </div>
             
             <div class='grid'>
@@ -151,6 +151,11 @@
 
         <script>
 
+            function print(){
+             
+                window.print()
+            }
+            
                 var app = new Vue({
                 el: '#app',
                 data: {
