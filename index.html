@@ -1,212 +1,213 @@
-
-<!doctype HTML>
-
-<html lang = "pt-br" >
-
+<!DOCTYPE html>
+<html lang='pt-br'>
     <head>
 
-        <meta charset = "utf-8">
-        <meta author  = "Bruno Galdino">
-        <link rel = "stylesheet" href = "estilo.css">
-        <link rel = "icon" href = "img/icone.png">
+        <meta charset="UTF-8"/>
 
-        <title>Bruno Galdino</title>
+        <style>
+            body, html {
 
+                width: 21cm;
+                height:30cm;
+                margin: 0 auto;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            .grid{
+
+                display: grid;
+                grid-template-columns: 10cm 10cm;
+                column-gap: 1cm;
+            }
+            .carteira{
+
+                width: 10cm;
+                height: 12cm;
+                background-color: rgb(51,102,255);
+                margin: 1.68cm 0;
+            }
+
+            .cart-head{
+
+                display: flex;
+                text-align: left;
+                color: white;
+            }
+
+            .cart-head img{
+
+                width: 3cm;
+                height: 4cm;
+                margin: 5px 10px;
+                margin-right:2cm;
+            }
+
+            .info{
+
+                display: flex;
+            }
+
+            .painel-info{
+
+                background-color: #ddd;
+                width: 4.9cm;
+                height: 6cm;
+                margin: 0px auto;
+                font-size: 14px;
+            }
+            
+            .painel-info b, p{  
+
+               margin-left: 4px;
+            }
+
+            .painel-info p{
+
+                width: 100%;
+                max-width: 5cm;
+                margin-top: 2px;
+                margin-bottom:0;
+                margin-bottom: 10px;
+                border-bottom: 1px solid rgb(51,102,255);
+                overflow: hidden;
+            }
+
+            .painel-info p:last-child{
+
+                border-bottom: none;
+            }
+            
+            .crop {
+
+                display: block;
+                height: 4cm;
+                width: 20cm;
+                position: relative;
+                overflow: hidden;
+                margin: 10px 10px;
+                margin-right: .5cm;
+            }
+            .crop img {
+                left: -10px; /* alter this to move left or right */
+                position: absolute;
+                top: 0px; /* alter this to move up or down */
+            }
+
+            @media print{
+
+                .no-print{
+
+                    display: none;
+                }
+            }
+        </style>
     </head>
+    <body> 
+        <div id="app">
+            <div class='no-print'>
+                <h1>GERAR CARTEIRINHA DE OPERADOR COLHEIA</h1>
+                <h3>Escolha a planilha base</h3>
+                <input type='file' name='base-op' id='base-op' @change="loadData" accept=".xls, .xlsx">
+                <br>
+                <br>
+                <button onclick="window.print()">IMPRIMIR CARTEIRAS</button>
+            </div>
+            <div class='grid'>
+                <div class='carteira' v-for='(op, count) in operadores' :key="count">
 
-    <body>
-        
-        <header id = "menu" >
-            
-            <nav class = "grid960" >
-       
-                <img src = "img/logo.png" class = "logo" alt = "Bruno Galdino" >
-                
-                <ul>
-
-                    <li><a href="#sobre">SOBRE</a></li>
-                    <li><a href="#projetos">PROJETOS</a></li>
-                    <li><a href="#contato">CONTATO</a></li>
-                
-                </ul>
-
-            </nav>
-
-        </header>
-
-        <div id = "social">
-            
-            <ul>
-                <li><a href = "https://github.com/brunosoaresgaldino" target = "_blank">GitHub</a></li>
-                <li><a href = "https://www.linkedin.com/in/brunosoaresgaldino" target = "_blank" >LinkedIn</a></li>
-                <li><a href = "https://www.facebook.com/profile.php?id=100003630590452" target = "_blank" >Facebook</a></li>
-            </ul>
-
-        </div>
-
-
-        <figure id = "foto_inicial" >
-
-            <img src = "img/foto_inicial.jpg" >
-
-        </figure>
-
-        <section id  = "sobre" class = "grid960" >
-
-            <img id  = "perfil" src = "img/perfil.jpg" class = "circular" >
-
-            <h1>Bruno Galdino</h1>
-
-            <p>Olá, meu nome é Bruno, sou estudante do Bacharelado Interdisciplinar em Ciências da Universidade Federal do Sul da Bahia(UFSB).</p>
-            
-            <p>
-               Sou apaixonado por programação de computadores e tecnologia, sonho em poder ter essa paixão como profissão. Atualmente sou voluntário no FESC, grupo de pesquisa em física estatística liderado pelo professor Doutor Fabricio L. Forgerini na UFSB.
-            </p>
+                    <div class='cart-head'>
+                        <div class="crop">
+                            <img :src='op.foto'>    
+                        </div>
+                        <p>Esta identificação é pessoal e intransferível. Comunicar imediatamente a área de Segurança em caso de perda ou extravio.</p>
+                    </div>
                     
-            <p>
-                No FESC faço parte de um time responsável por desenvolver uma ferramenta para análise de redes complexas, que será utilizada em projetos para a descrição da rede elétrica brasileira, dentre outros projetos que se baseiam em sistemas complexos.
-            </p>
-                    
-            <p>
-                Minha linguagem mãe é C, ela é que mais utilizo e tenho melhor domínio. Venho estudando outras linguagens como: Python, JavaScript, C++ e tecnolgias web.
-            </p>
-
-        </section>
-
-        <section id = "projetos" class = "grid960">
-
-            <h1>PROJETOS</h1>
-
-            <p>Esses são alguns dos projetos que tenho trabalhado nas horas vagas.</p>
-
-            <table id = "painel_projetos">
-
-                    <tr>
-                            <td>
-                                <figure>
+                    <div class='info'>
+                        <div class='painel-info'>
+                            <b>Nome:</b>
+                            <p>{{op.nome}} </p>
+                            <b>NP:</b>
+                            <p>{{op.np}}</p>
+                            <b>Cargo:</b>
+                            <p>{{op.cargo}}</p>
+                            <b>Tipo Equipamento:</b>
+                            <p>{{op.equip}} </p>
+                        </div>
+                        <div class='painel-info'>
+                            <b>Gerência:</b>
+                            <p>Colheita</p>
+                            <b>Obsevações:</b>
+                            <p>De acordo com a Portaria 3214/78, NR 31, subitem 12.82. </p>
+                            <b>Segurança do Trabalho:</b>
+                            <p>RAEDSON ALVES ALMEIDA  <br> MTE MG N° 0032.773</p>
+                        </div>
+                        
+                    </div>
+                    <img style='margin: 2px; width: 4.9cm;' src='./logo.PNG'>
+                    <button class='no-print'style='margin: 2px; width: 4.9cm;' @click='del(count)'>DELETAR</button>
+                </div>
+            </div>
+        </div> 
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="./xlsx.full.min.js"></script>
         
-                                    <img src = "img/snake.png">
-                                    <figcaption>
-                                        <a href = "https://github.com/BrunoSoaresGaldino/Snake" >
-                                            Jogo da cobrinha</a> implementado em C. Utilizando Allegro para os gráficos.
-                                        
-                                    </figcaption>
-        
-                                </figure>
-        
-                            </td>
-                            <td>
-                                <figure>
-        
-                                    <img src = "img/analisador.png">
-                                    
-                                    <figcaption>                                    
-                                        <a href = "https://github.com/BrunoSoaresGaldino/Analisador-de-Rede" >
-                                        Software para simulações</a> com redes complexas. Utilizado no FESC para caracterizar a rede elétrica brasileira.
-                                        
-                                    </figcaption>
-        
-                                </figure>
-            
-                            </td>
+        <script>
 
-                    </tr>   
-                    
-                    <tr>
-                            <td>
-                                
-                                <figure>
-            
-                                    <img src = "img/bgmatrix.png">
-                                    <figcaption>
-                                        <a href = "https://github.com/BrunoSoaresGaldino/BGMatrix" >
-                                        Um conjunto de rotinas</a> para operar com matrizes matemáticas. Trabalho de conclusão do meu curso.
-                                    </figcaption>
-            
-                                </figure>
-                
-                            </td>
-                                                                        
-                    
-                        <td>
-                            <figure>
+            let app = new Vue({
 
-                                <img src = "img/flappy.png">
-                                <figcaption>
-                                    Um "clone" do famigerado flappy bird.
-                                </figcaption>
+                el: '#app',
+                data: {
+                    base:'',
+                    operadores:[]
+                },
+                methods: {
 
-                            </figure>
+                    del(i){
 
-                        </td>
-                    
-                    </tr>
+                        this.operadores.splice(i, 1)
+                    },
+                    loadData (event) {
 
-                    <tr>
-                        <td>
-                            <figure>
-    
-                                <img src = "img/quiz.png">
-                                
-                                <figcaption>
-                                    Mistura de jogo da velha com quiz. Muito divertido, vale a pena jogar.
-                                </figcaption>
-    
-                            </figure>
-    
-                        </td>
-                        <td>
-                                <figure>
-        
-                                    <img src = "img/gui.png">
-                                    <figcaption>
-                                        
-                                        <a href="https://github.com/BrunoSoaresGaldino/AbIM" target = "_blank" >
-                                        AbIM Gui</a>. Brincando com Immediate mode GUI usando Allegro.
-                                    
-                                    </figcaption>
-        
-                                </figure>
-        
-                            </td>
 
-                </tr>
+                        let oFile = event.target.files[0];
+                        let sFilename = oFile.name;
+                        let operadores = this.operadores
+                        let reader = new FileReader();
 
-            </table>
+                        // Ready The Event For When A File Gets Selected
+                        reader.onload = function(e) {
+                            
+                            let data = e.target.result
+                            let wb = XLSX.read(data,{type:'binary'})
+                            let first_sheet_name = wb.SheetNames[0]
 
-        </section>
+                            const ops = XLSX.utils.sheet_to_row_object_array(wb.Sheets[first_sheet_name])
+                            
+                            ops.forEach(op => {
 
-        <section id = "contato" class = "grid960 pt140">
+                                if(op.NOME){
 
-            <h1>CONTATO</h1>
+                                    operadores.push({
 
-            <p>Você pode falar comigo no email <strong>brunobmx1995@gmail.com</strong> ou ligando para <strong>(73) 99964-6024</strong>. Se preferir, deixe sua mensagem no formulário abaixo.</p>
+                                        nome:op.NOME,
+                                        np:op.NP,
+                                        cargo: op.CARGO,
+                                        equip: op.EQUIPAMENTO,
+                                        foto: "https://drive.google.com/thumbnail?id="+op.FOTO.split("id=")[1]
+                                    })
+                                }
+                            })
+                        }
 
-            <form id = "form_contato" action="https://formspree.io/brunobmx1995@gmail.com" method="POST">
+                        reader.onerror = function (e){
 
-                <label for = "form_field_nome">Nome</label> 
-                <label for = "form_field_email">Email</label> 
-                <label for = "form_field_tel" >Telefone</label>
-                
-                <input id = "form_field_nome" name = "Nome" type = "text" placeholder = "Fulano de Tal" required>
-                <input id = "form_field_email" name = "Email" type = "email" placeholder = "nome@mail.com" required>
-                <input id = "form_field_tel" name = "Telefone" placeholder = "73 99999-9999" pattern = "[0-9]{2} [0-9]{5}-[0-9]{4}" >
-                
-                <label for = "form_field_msg" id = "label_msg">Mensagem</label>
-                <textarea id = "form_field_msg" name = "Mensagem"></textarea>
- 
-                <input type = "submit" id = "form_submit" value = "Enviar">
+                            console.log(e.target.error.code)
+                        }
 
-            </form>
-
-        </section>
-
-        <footer>
-
-            <p>Bruno Soares Galdino - 2019</p>
-
-        </footer>
-
+                        reader.readAsBinaryString(oFile)
+                    }
+                }
+            })
+        </script>
     </body>
-
 </html>
