@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang='pt-br'>
+    <head>
+
+        <meta charset="UTF-8"/>
+
+        <style>
+            body, html {
+
+                width: 21cm;
+                height:30cm;
+                margin: 0 auto;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            .grid{
+
+                display: grid;
+                grid-template-columns: 10cm 10cm;
+                column-gap: 1cm;
+            }
+            .carteira{
+
+                width: 10cm;
+                height: 12cm;
+                background-color: rgb(51,102,255);
+                margin: 1.68cm 0;
+            }
+
+            .cart-head{
+
+                display: flex;
+                text-align: left;
+                color: white;
+            }
+
+            .cart-head img{
+
+                width: 3cm;
+                height: 4cm;
+                margin: 5px 10px;
+                margin-right:2cm;
+            }
+
+            .info{
+
+                display: flex;
+            }
+
+            .painel-info{
+
+                background-color: #ddd;
+                width: 4.9cm;
+                height: 6cm;
+                margin: 0px auto;
+                font-size: 14px;
+            }
+            
+            .painel-info b, p{  
+
+               margin-left: 4px;
+            }
+
+            .painel-info p{
+
+                width: 100%;
+                max-width: 5cm;
+                margin-top: 2px;
+                margin-bottom:0;
+                margin-bottom: 10px;
+                border-bottom: 1px solid rgb(51,102,255);
+                overflow: hidden;
+            }
+
+            .painel-info p:last-child{
+
+                border-bottom: none;
+            }
+            
+            .crop {
+
+                display: block;
+                height: 4cm;
+                width: 20cm;
+                position: relative;
+                overflow: hidden;
+                margin: 10px 10px;
+                margin-right: .5cm;
+            }
+            .crop img {
+                left: -10px; /* alter this to move left or right */
+                position: absolute;
+                top: 0px; /* alter this to move up or down */
+            }
+
+            @media print{
+
+                .no-print{
+
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body> 
+        <div id="app">
+            <div class='no-print'>
+                <h1>GERAR CARTEIRINHA DE OPERADOR COLHEIA</h1>
+                <h3>Escolha a planilha base</h3>
+                <input type='file' name='base-op' id='base-op' @change="loadData" accept=".xls, .xlsx">
+                <br>
+                <br>
+                <button onclick="window.print()">IMPRIMIR CARTEIRAS</button>
+            </div>
+            <div class='grid'>
+                <div class='carteira' v-for='(op, count) in operadores' :key="count">
+
+                    <div class='cart-head'>
+                        <div class="crop">
+                            <img :src='op.foto'>    
+                        </div>
+                        <p>Esta identificação é pessoal e intransferível. Comunicar imediatamente a área de Segurança em caso de perda ou extravio.</p>
+                    </div>
+                    
+                    <div class='info'>
+                        <div class='painel-info'>
+                            <b>Nome:</b>
+                            <p>{{op.nome}} </p>
+                            <b>NP:</b>
+                            <p>{{op.np}}</p>
+                            <b>Cargo:</b>
+                            <p>{{op.cargo}}</p>
+                            <b>Tipo Equipamento:</b>
+                            <p>{{op.equip}} </p>
+                        </div>
+                        <div class='painel-info'>
+                            <b>Gerência:</b>
+                            <p>Colheita</p>
+                            <b>Obsevações:</b>
+                            <p>De acordo com a Portaria 3214/78, NR 31, subitem 12.82. </p>
+                            <b>Segurança do Trabalho:</b>
+                            <p>RAEDSON ALVES ALMEIDA  <br> MTE MG N° 0032.773</p>
+                        </div>
+                        
+                    </div>
+                    <img style='margin: 2px; width: 4.9cm;' src='./logo.PNG'>
+                    <button class='no-print'style='margin: 2px; width: 4.9cm;' @click='del(count)'>DELETAR</button>
+                </div>
+            </div>
+        </div> 
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="./xlsx.full.min.js"></script>
+        
+        <script>
+
+            let app = new Vue({
+
+                el: '#app',
+                data: {
+                    base:'',
+                    operadores:[]
+                },
+                methods: {
+
+                    del(i){
+
+                        this.operadores.splice(i, 1)
+                    },
+                    loadData (event) {
+
+
+                        let oFile = event.target.files[0];
+                        let sFilename = oFile.name;
+                        let operadores = this.operadores
+                        let reader = new FileReader();
+
+                        // Ready The Event For When A File Gets Selected
+                        reader.onload = function(e) {
+                            
+                            let data = e.target.result
+                            let wb = XLSX.read(data,{type:'binary'})
+                            let first_sheet_name = wb.SheetNames[0]
+
+                            const ops = XLSX.utils.sheet_to_row_object_array(wb.Sheets[first_sheet_name])
+                            
+                            ops.forEach(op => {
+
+                                if(op.NOME){
+
+                                    operadores.push({
+
+                                        nome:op.NOME,
+                                        np:op.NP,
+                                        cargo: op.CARGO,
+                                        equip: op.EQUIPAMENTO,
+                                        foto: "https://drive.google.com/thumbnail?id="+op.FOTO.split("id=")[1]
+                                    })
+                                }
+                            })
+                        }
+
+                        reader.onerror = function (e){
+
+                            console.log(e.target.error.code)
+                        }
+
+                        reader.readAsBinaryString(oFile)
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
