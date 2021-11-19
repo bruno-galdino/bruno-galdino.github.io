@@ -68,7 +68,8 @@
             </div>
         </div>
         <div class='container-fluid mt-4 form' v-else>
-        <form target="_blank" action="https://formsubmit.co/bsg.galdino@gmail.com" method="POST">
+        <form target="_blank" action="https://formsubmit.co/e630fe1dda3ae9fb1e4e528d35eec205" method="POST">
+            <input type="hidden" name="_next" value="https://bruno-galdino.github.io/easy_dna/index.html">
             <div class='row justify-content-center' v-show='step == 0'>
                 <div class="mb-3 col-lg-7 col-md-12">
                     <label class="form-label mb-0">NP</label><br>
@@ -166,18 +167,20 @@
             <div class='row justify-content-right p-0'>
                 <div class='col'></div>
                 <div class='col-auto'>
-                    <button class='btn btn-danger mr-auto' @click='limparCadastro'>limpar castro</button>
+                    <!-- <button class='btn btn-danger mr-auto' @click='limparCadastro'>limpar castro</button> -->
+                    <button class='btn btn-danger mr-auto' @click='syncData'>limpar castro</button>
                 </div>
             </div>
         </div>
     </form>
     </div>
 
-    <script src='./listas/equipe.js'></script>
-    <script src='./listas/equipamento.js'></script>
-    <script src='./listas/situacao.js'></script>
+    <script src='/listas/equipe.js'></script>
+    <script src='/listas/equipamento.js'></script>
+    <script src='/listas/situacao.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/3.2.0-rc.3/dexie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
 
     <script>
 
@@ -210,6 +213,16 @@
         },
         methods:{
 
+            syncData: async function(){
+
+                await axios.post('https://formsubmit.co/e630fe1dda3ae9fb1e4e528d35eec205',{
+
+                    np:'TESTE',
+                    nome:'Teste',
+                    unidade:'Teste'
+                });
+
+            },
             saveUser: async function(){
 
                 try{
