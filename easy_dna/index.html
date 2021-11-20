@@ -3,190 +3,164 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>EASY DNA</title>
+    <title>EASY DNA - DNA de um jeito simplificado.</title>
+    <link rel='icon' href='./icons/favicon-32x32.png'>
     <style>
-       
+
+        .form-control, .form-select{
+
+            border-radius: 0;
+            border-width: 0 0 2px 0;
+            font-size: 10pt;
+        }
+        .form-label{
+
+            font-size: 10pt;
+            color: rgb(16, 114, 14);
+        }
+
+        textarea.form-control{
+
+            border-width: 2px;
+        }
+
     </style>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="./scripts/email.js"></script>
     <script type="text/javascript">
-    (function() {
-    emailjs.init("user_d1H61ykQEkpeeUqk0CQCo");
-    })();
+        (function() {
+        emailjs.init("user_d1H61ykQEkpeeUqk0CQCo");
+        })();
     </script>
   </head>
   <body>
     <div id='app'>
-        <nav class='navbar navbar-expand-lg navbar-light' style='background-color: rgb(23,222,18);'>
+        <nav class='navbar navbar-expand-lg navbar-light' style='background-color: #17de12;'>
             <div class='container-fluid'>
-                <label class='navbar-brand' style='color:#fff'>
-                    <b>EASY DNA</b>
-                </label>
+                <label class='navbar-brand' style='color:#fff'>EASY DNA</label>
+                <label class='navbar-brand' style='color:#fff'><b>{{greetUser}}</b></label> 
+                <button class='btn btn-danger btn-sm' @click='limparCadastro'>Limpar castro</button>
             </div>
         </nav>
-        <div><h2 class='text-center mt-3 mb-4'>DNA de um jeito simplificado!</h2></div>
-        <div class='container-fluid my-0 form' v-if='firstAcess==1'>
-            <h4 class='text-center'>Vamos configurar seu primeiro acesso</h4>
+        <div class='container-fluid form' v-if='!np'>
+            <h4 class='text-center'>Primeiro acesso</h4>
             <div class='row justify-content-center'>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">NP</label><br>
-                    <input type="text" class="form-control " v-model='np' placeholder="444444">
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Nome</label><br>
-                    <input type="text" class="form-control " v-model='nome' placeholder="José da Silva">
-                </div>
                 <div class="mb-3 col-lg-7 col-md-12">
                     <label class="form-label mb-0">Token</label><br>
                     <input type="text" class="form-control " v-model='token' placeholder="Insira o Token fornecido pelo administrador">
                 </div>
-            </div>
-            <div class='row my-2 justify-content-center'>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Unidade</label><br>
-                    <select class="form-select" v-model='unidade'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(unidade,i) in unidades' :key='i' :value='unidade'>{{unidade}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Gerencia</label><br>
-                    <select class="form-select" v-model='gerencia'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(gerencia,i) in gerencias' :key='i' :value='gerencia'>{{gerencia}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Área/Módulo</label><br>
-                    <select class="form-select" v-model='equipe'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(equipe,i) in equipes' :key='i' :value='equipe'>{{equipe}}</option>
-                    </select>
-                </div>
                 <div class='col-lg-7 col-md-12'>
-                    <button class='btn btn-primary' @click='saveUser'>Salvar</button>
+                    <button class='btn btn-primary' @click='importUserData'>Salvar</button>
                 </div>
             </div>
         </div>
-        <div class='container-fluid mt-4 form' v-else>
-        <form action="https://formsubmit.co/e630fe1dda3ae9fb1e4e528d35eec205" method="POST">
-            <input type="hidden" name="_next" value="https://bruno-galdino.github.io/easy_dna/index.html">
-            <input type="hidden" name="_subject" value="Comunicado de DNA">
-            <input type="text" name="_honey" style="display:none">
-            <input type="hidden" name="_captcha" value="false">
-
-            <div class='row justify-content-center' v-show='step == 0'>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">NP</label><br>
-                    <input type="text" class="form-control " name='NP' v-model='np' placeholder="444444">
+        <div class='container form mt-4' v-else>
+            <form action="https://formsubmit.co/e630fe1dda3ae9fb1e4e528d35eec205" method="POST">
+                <input type="hidden" name="_next" value="https://bruno-galdino.github.io/easy_dna/index.html"><input type="hidden" name="_subject" value="Comunicado de DNA"><input type="text" name="_honey" style="display:none"><input type="hidden" name="_captcha" value="false">
+                <div class='row mb-5'>
+                    <div class="col-4">
+                        <label class="form-label mb-0">Data</label><br>
+                        <input type="datetime-local" class="form-control " name='DATA' v-model='data'>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label mb-0">Unidade</label><br>
+                        <select class="form-select" v-model='unidade' name='UNIDADE'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(unidade,i) in unidades' :key='i' :value='unidade'>{{unidade}}</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Nome</label><br>
-                    <input type="text" class="form-control " name='NOME' v-model='nome' placeholder="José da Silva">
+                <div class='row mb-5 justify-content-center'>
+                    <div class="col-4">
+                        <label class="form-label mb-0">Gerencia</label><br>
+                        <select class="form-select" v-model='gerencia' name='GERENCIA'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(gerencia,i) in gerencias' :key='i' :value='gerencia'>{{gerencia}}</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label mb-0">Área/Módulo</label><br>
+                        <select class="form-select" v-model='equipe' name='EQUIPE'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(equipe,i) in equipes' :key='i' :value='equipe'>{{equipe}}</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label mb-0">Equipamento</label><br>
+                        <select class="form-select" v-model='equipamento' name='EQUIPAMENTO'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(equipamento,i) in equipamentos' :key='i' :value='equipe'>{{equipamento}}</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Data</label><br>
-                    <input type="datetime-local" class="form-control " name='DATA' v-model='data'>
+                <div class='row mb-5 justify-content-center'>
+                    <div class="col-6">
+                        <label class="form-label mb-0">Humor do DNA</label><br>
+                        <select class="form-select" v-model='humor' name='HUMOR'>
+                            <option value="" selected>Selecione</option>
+                            <option value='POSITIVO' selected>Positivo</option>
+                            <option value='NEGATIVO'>Negativo</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label mb-0">Categoria</label><br>
+                        <select class="form-select" v-model='categoria' name='CATEGORIA'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(categoria,i) in categorias' :key='i' :value='categoria'>{{categoria}}</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0"> </label><br>
-                    <select class="form-select" disabled>
-                    </select>
+                <div class='row mb-5 justify-content-center'>
+                    <div class="col-6">
+                        <label class="form-label mb-0">Item</label><br>
+                        <select class="form-select" v-model='item' name='ITEM'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(item,i) in items' :key='i' :value='item'>{{item}}</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label mb-0">Situação ou Desvio</label><br>
+                        <select class="form-select" v-model='situacao' name='SITUAÇÃO'>
+                            <option value="" selected>Selecione</option>
+                            <option v-for='(situacao,i) in situacoes' :key='i' :value='situacao'>{{situacao}}</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class='row my-2 justify-content-center' v-show='step == 1'>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Unidade</label><br>
-                    <select class="form-select" v-model='unidade' name='UNIDADE'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(unidade,i) in unidades' :key='i' :value='unidade'>{{unidade}}</option>
-                    </select>
+                <div class='row mb-5 justify-content-center'>
+                    <div class='col-12'>
+                        <label class="form-label mb-0">Texto</label><br>
+                        <textarea class='form-control ' v-model='texto' name='TEXTO'></textarea>
+                        <!-- {{equipamento}} - {{item}} ESTÁ {{situacao}} -->
+                    </div>
                 </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Gerencia</label><br>
-                    <select class="form-select" v-model='gerencia' name='GERENCIA'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(gerencia,i) in gerencias' :key='i' :value='gerencia'>{{gerencia}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Área/Módulo</label><br>
-                    <select class="form-select" v-model='equipe' name='EQUIPE'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(equipe,i) in equipes' :key='i' :value='equipe'>{{equipe}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Equipamento</label><br>
-                    <select class="form-select" v-model='equipamento' name='EQUIPAMENTO'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(equipamento,i) in equipamentos' :key='i' :value='equipamento'>{{equipamento}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class='row my-4 justify-content-center' v-show='step == 2'>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Humor do DNA</label><br>
-                    <select class="form-select" v-model='humor' name='HUMOR'>
-                        <option value="" selected>Selecione</option>
-                        <option value='POSITIVO' selected>Positivo</option>
-                        <option value='NEGATIVO'>Negativo</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Categoria</label><br>
-                    <select class="form-select" v-model='categoria' name='CATEGORIA'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(categoria,i) in categorias' :key='i' :value='categoria'>{{categoria}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Item</label><br>
-                    <select class="form-select" v-model='item' name='ITEM'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(item,i) in items' :key='i' :value='item'>{{item}}</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-lg-7 col-md-12">
-                    <label class="form-label mb-0">Situação ou Desvio</label><br>
-                    <select class="form-select" v-model='situacao' name='SITUAÇÃO'>
-                        <option value="" selected>Selecione</option>
-                        <option v-for='(situacao,i) in situacoes' :key='i' :value='situacao'>{{situacao}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class='row my-4 justify-content-center' v-show='step == 3'>
-                <div class='col-lg-7 col-md-12'>
-                    <label class="form-label mb-0">Texto</label><br>
-                    <textarea class='form-control ' rows=9 name='TEXTO'></textarea>
-                    <!-- {{equipamento}} - {{item}} ESTÁ {{situacao}} -->
-                </div>
-            </div>
-            <div class='row my-4 justify-content-center'>
-                <div class='col-lg-7 col-md-12'>
-                    <button class='btn btn-secondary' style='margin-right: 10px;' @click='step > 0? step-- : step'>Passo anterior</button>
-                    <button class='btn btn-primary ' v-if='step < 3' @click='step < 3 ? step++ : step'>Próximo passo</button>
-                    <button type='submit' v-else class='btn btn-primary'>Enviar</button>
-                </div>
-            </div>
-            <div class='row justify-content-right p-0'>
-                <div class='col'></div>
-                <div class='col-auto'>
-                    <!-- <button class='btn btn-danger mr-auto' @click='limparCadastro'>limpar castro</button> -->
-                    <button class='btn btn-danger mr-auto' @click='syncData'>limpar castro</button>
+            </form>
+        </div>
+        <div class='container'>
+            <div class='row mb-5 justify-content-center'>
+                <div class='col-12'>
+                    <button class='btn btn-primary' @click='sendForm'>Enviar</button>
                 </div>
             </div>
         </div>
-    </form>
     </div>
 
     <script src='./listas/equipe.js'></script>
     <script src='./listas/equipamento.js'></script>
     <script src='./listas/situacao.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/3.2.0-rc.3/dexie.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script src="./scripts/vue.js"></script>
+    <script src="./scripts/dexie.js"></script>
+    <script src="./scripts/uuidv4.js"></script>
+    <script src="./scripts/axios.js"></script>
 
     <script>
+
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+            navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then(res => console.log("service worker registered"))
+                .catch(err => console.log("service worker not registered", err))
+            })
+        }
 
         const db = new Dexie('easy_dna')
 
@@ -199,81 +173,85 @@
         el:'#app',
         data:{
 
-            step:0,
-            unidade:'',
-            gerencia:'',
-            equipe:'',
-            equipamento:'',
-            humor:'',
-            categoria:'',
-            item:'',
-            situacao:'',
-            texto:'',
-            np:'',
-            nome:'',
-            data:'',
-            firstAcess:0,
-            token:'',
+            unidade:'',gerencia:'',equipe:'',equipamento:'',humor:'',categoria:'',item:'',situacao:'',
+            texto:'',np:'',nome:'',data:'',token:'',uuid:uuidv4(),
         },
         methods:{
 
-            syncData: async function(){
-
-
-                await axios({
-                        
-                    method: 'POST',
-                    url: 'https://formsubmit.co/e630fe1dda3ae9fb1e4e528d35eec205',
-                    data: {
-                            
-                        np:'TESTE',
-                        nome:'Teste',
-                        unidade:'Teste'
-                    }
-                })
-            },
-            saveUser: async function(){
+            async importUserData(){
 
                 try{
 
-                    let props = ['np','token','nome','unidade','gerencia','equipe']
+                    await axios.get(`https://api.jsonstorage.net/v1/json/${this.token}`).then( res => {
 
+                        res.data.token = this.token
+                        this.saveUser(res.data)
+                    })
+                }
+                catch(err){
 
-                    for(let prop of props){
+                    alert('Não foi possível carregar os seus dados. Tente novamente.')
+                }
+            },
+            sendForm: async function(){
 
-                        if(!this[prop]){
+                let data = {}
+                const props = ['np','nome','data','unidade','gerencia','equipe','equipamento','humor','categoria','item','situacao','texto','token','uuid']
+                
+                for(let prop of props){
 
-                            alert(`${prop} é obrigatório!`)
-                            return
-                        }
+                    if(!this[prop]){
 
+                        alert(`${prop.toUpperCase()} é obrigatório`)
+                        return
                     }
 
-                    await db.user.add({
+                    data[prop] = this[prop]
+                }
 
-                        token:this.token,
-                        np:this.np,
-                        nome:this.nome,
-                        unidade:this.unidade,
-                        gerencia:this.gerencia,
-                        equipe:this.equipe
+                try{
 
+                    await axios({
+                        
+                        method: 'POST',
+                        url: 'https://formsubmit.co/e630fe1dda3ae9fb1e4e528d35eec205',
+                        data
+                    }).then( _ =>{
+
+                        alert('DNA comunicado com sucesso!')
+                        window.location.reload()
                     })
+
+                }
+                catch(e){
+
+                    console.log('Erro ao comuicar DNA')
+                }
+                
+            },
+            saveUser: async function(data){
+
+                try{
+
+                    await db.user.add(data)
+                    window.location.reload()
 
                 }catch(e){
 
-                    alert('Falha ao salvar informações. Tente novamente')
+                    alert('Falha ao salvar usuário. Tente novamente')
                     return
                 }
-
-                this.firstAcess = 0
-
             },
             limparCadastro: async function(){
 
                 try{
+
+                    if(!confirm('Tem certeza que deseja apagar seus dados de usuário?')){
+
+                        return
+                    }
+
                     await db.user.clear()
-                    
                 }
                 catch(e){
 
@@ -292,15 +270,21 @@
             equipamentos(){return _equipamento(this)},
             categorias(){return _categoria(this)},
             items(){return _item(this)},
-            situacoes(){return _situacao(this)}
+            situacoes(){return _situacao(this)},
+            greetUser(){
+
+                let firstName = this.nome.split(' ')[0]
+                firstName = firstName[0]+firstName.slice(1,firstName.length).toLowerCase()
+                return `Olá, ${firstName} !`
+            }
         },
         created: async function(){
 
-            if(await db.user.count() == 0 ){
+            let d = new Date()
+            
+            this.data = `${d.toJSON().slice(0,10)}T${d.getHours()}:${d.getMinutes()}`
 
-                this.firstAcess = 1
-            }
-            else{
+            if(await db.user.count() > 0 ){
 
                 let user = await db.user.toArray()
 
@@ -309,7 +293,7 @@
                 this.unidade = user[0].unidade
                 this.gerencia = user[0].gerencia
                 this.equipe = user[0].equipe
-                // this.data = new Date().toLocaleDateString()
+                this.token = user[0].token
             }
         }
       })

@@ -1,23 +1,29 @@
-const staticDevCoffee = "dev-coffee-site-v1"
+const staticEasyDNA = "easy-DNA-v1"
+
 const assets = [
-  "/",
-  "/index.html",
-  "/css/style.css",
-  "/js/app.js",
-  "/images/coffee1.jpg",
-  "/images/coffee2.jpg",
-  "/images/coffee3.jpg",
-  "/images/coffee4.jpg",
-  "/images/coffee5.jpg",
-  "/images/coffee6.jpg",
-  "/images/coffee7.jpg",
-  "/images/coffee8.jpg",
-  "/images/coffee9.jpg",
+
+  "./",
+  "./index.html",
+  "./scripts/axios.js",
+  "./scripts/dexie.js",
+  "./scripts/vue.js",
+  "./scripts/uuidv4.js",
+  "./scripts/email.js",
+
+  "./icons/android-chrome-192x192.png",
+  "./icons/android-chrome-512x512.png",
+  "./icons/apple-touch-icon.png",
+  "./icons/favicon-32x32.png",
+
+  "./listas/equipamento.js",
+  "./listas/equipe.js",
+  "./listas/situacao.js",
+
 ]
 
 self.addEventListener("install", installEvent => {
   installEvent.waitUntil(
-    caches.open(staticDevCoffee).then(cache => {
+    caches.open(staticEasyDNA).then(cache => {
       cache.addAll(assets)
     })
   )
@@ -29,4 +35,4 @@ self.addEventListener("fetch", fetchEvent => {
         return res || fetch(fetchEvent.request)
       })
     )
-  })
+})
